@@ -99,6 +99,7 @@ client.on("message", (message) => {
         const command = args[0].toLowerCase();
 
         try {
+            log.info(`[${message.guild.name}#${message.channel.name} - ${message.author.tag}] ${message.content}`)
             commands.get(command).run({
                 message: message,
                 args: args,

@@ -8,10 +8,10 @@ module.exports = class _MinecaftAPI {
      * @returns {<String>}
      */
 
-    static getUuid(name) {
+    static async getUuid(name) {
         if (name == null) return null;
-        let player = axios.get(`https://api.mojang.com/users/profiles/minecraft/${name}`);
-        return player;
+        let { data } = await axios.post(`https://api.mojang.com/profiles/minecraft`, [name]);
+        return data[0];
 
     }
 
@@ -20,10 +20,10 @@ module.exports = class _MinecaftAPI {
      * @returns {<String>}
      */
 
-    static getName(uuid) {
+    static async getName(uuid) {
         if (uuid == null) return null;
-        let player = axios.get(`https://api.mojang.com/users/profiles/minecraft/${uuid}`);
-        return player;
+        let { data } = await axios.get(`https://api.mojang.com/users/profiles/minecraft/${uuid}`);
+        return data[0];
 
     }
 

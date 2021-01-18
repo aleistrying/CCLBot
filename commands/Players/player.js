@@ -4,18 +4,27 @@ const GROUP = require("../../utils/groups");
 const log = require("../../utils/logger");
 const MCAPI = require("../../utils/MinecraftAPI");
 const Players = require("../../models/Players");
-module.exports.run = ({ message, args, prefix }) => {
+module.exports.run = async ({ message, args, prefix }) => {
+    let embed = new MessageEmbed();
     if (args[1]) {
-        let pl = Players.find({ uuid: args[1] })
-        let embed = new MessageEmbed()
-            .setColor(COLOR.INFO)
-            .setAuthor(`${pl.name}'s Profile`)
-            .setThumbnail(PlayerHead)
-            .addField("Team", pl.team)
-            .addField("Rank", pl.rank)
-            .addField("UUID", pl.uui);
+        const playerUuid = await MCAPI.getUuid(args[1]);
+        if (playerUuid && playerUuid.id) {
+            let pl = await Players.findOne({ "uuid": playerUuid.id })
+            embed.setColor(COLOR.INFO)
+                .setTitle(`${playerUuid.name}'s Profile`)
+                .setThumbnail(`https://crafatar.com/renders/head/${playerUuid.id}`)
+                .addField("Team", (pl) ? pl.team : "None")
+                .addField("Rank", (pl) ? pl.rank : "None")
+                .addField("UUID", playerUuid.id);
+        }
+        else
+            embed.setColor(COLOR.WARN)
+                .setDescription("No User Found")
         // .addField("Leagues", "CCL");
     }
+    else
+        embed.setColor(COLOR.WARN)
+            .setDescription("No User provided")
     message.channel.send(embed)
 }
 
