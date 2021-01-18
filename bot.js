@@ -2,15 +2,31 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 const log = require("./utils/logger");
+const COLOR = require("./utils/colors")
+const mongoose = require("mongoose");
+
+// import manifest
+const manifest = JSON.parse(fs.readFileSync("./manifest.json"));
+
+//Connect to the database
+let mongodbUrl = `mongodb+srv://${manifest.mongoose.acc}:${manifest.mongoose.pass}${manifest.mongoose.node}/${manifest.mongoose.database}`;
+mongoose
+    .connect(mongodbUrl, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+        // useFindAndModify: true,
+    }).then(() => log.info(`Connected to database ${manifest.mongoose.database}`))
+    .catch((err) => log.error("db error", err.reason));
+
+//add the messasge embed constructor
+const MessageEmbed = Discord.MessageEmbed;
 
 // create the client
 const client = new Discord.Client();
 
 // import commands
 let commands = new Map();
-
-// import manifest
-const manifest = JSON.parse(fs.readFileSync("./manifest.json"));
 
 // grab the command directory
 fs.readdir("./commands/", (err, files) => {
@@ -32,14 +48,14 @@ fs.readdir("./commands/", (err, files) => {
                 let commandIdentifier = file.split(".js")[0].toLowerCase();
 
                 // grab our configured commands
-                let commandMap = new Map(Object.entries(manifest.commands));
+                // let commandMap = new Map(Object.entries(manifest.commands));
 
-                // grab aliases for this command
-                let aliases = commandMap.get(commandIdentifier);
+                // // grab aliases for this command
+                // let aliases = commandMap.get(commandIdentifier);
 
                 // if the command has aliases, load them
-                if (aliases) {
-                    for (alias of aliases.aliases) {
+                if (command.help && command.help.aliases) {
+                    for (alias of command.help.aliases) {
                         commands.set(alias, command);
                     }
                 }
@@ -48,15 +64,21 @@ fs.readdir("./commands/", (err, files) => {
                 commands.set(commandIdentifier, command);
             }
         });
+
+    // log.error(commands);
+    // log.error(commands.get('r'));
 });
 
 client.on("error", (err) => {
-    log.error(err);
+    log.error("discord err", err);
 });
 
 client.on("ready", () => {
     log.info("Bot is online.");
-    client.user.setActivity(`Watching CCL`);
+    client.user.setActivity(
+        'CCL', { type: 'PLAYING' }
+    );
+
 });
 
 client.on("message", (message) => {
@@ -70,19 +92,25 @@ client.on("message", (message) => {
     // make sure the message starts with our prefix
     if (content.indexOf(prefix) == 0) {
         // run some regex to allow easier arg querying
-        const args = content.splice(prefix).trim().split(/ +/g);
+        const args = content.slice(1).trim().split(/ +/g);
+        log.info("args " + args)
 
         // grab the intended command
         const command = args[0].toLowerCase();
 
         try {
-            commands.get(command).execute({
+            commands.get(command).run({
                 message: message,
                 args: args,
                 prefix: prefix,
             });
         } catch (err) {
+            log.error("running command", err);
             log.warn(`Tried to run command "${command}" but it doesn't exist.`);
+            let embed = new MessageEmbed()
+                .setColor(COLOR.WARN)
+                .setAuthor(`Tried to run command "${command}" but it doesn't exist.`);
+            message.channel.send(embed)
         }
     }
 });

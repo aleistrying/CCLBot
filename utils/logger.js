@@ -31,3 +31,5 @@ logger.error = (msg) => {
 logger.warn = (msg) => {
     console.log(format(colors.warn, "Warn", msg));
 };
+
+module.exports = logger;
