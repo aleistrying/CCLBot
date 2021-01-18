@@ -69,7 +69,7 @@ module.exports.run = async ({ message, args, prefix }) => {
     }
     else {
         message.channel.send(new MessageEmbed()
-            .setColor(COLOR.WARN)
+            .setColor(COLOR.ERROR)
             .setTitle("Rankings")
             .setDescription("No teams have been found."))
         log.error("Teams DB could not load.")
