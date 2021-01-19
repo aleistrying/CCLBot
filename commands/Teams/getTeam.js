@@ -4,6 +4,7 @@ const { MessageEmbed } = require("discord.js");
 const GROUP = require("../../utils/groups");
 const COLOR = require("../../utils/colors");
 const MCAPI = require("../../utils/MinecraftAPI");
+const log = require("../../utils/logger")
 module.exports.run = async ({ message, args, prefix }) => {
     if (args[1]) {
         const tm = await Teams.aggregate([
@@ -39,17 +40,23 @@ module.exports.run = async ({ message, args, prefix }) => {
             let formattedList = "";
             formattedList += `**Tier**\n${tm[0].wins}\n\n`;
             formattedList += `**Members**\n`;
-            let i = 0, ppl = [];
+            let i = 0;
+            let playerNames = [];
+
+            let time1 = new Date();
             while (i < pl.length) {
-                ppl[i] = await MCAPI.getName(pl[i].uuid)
+                playerNames.push(await MCAPI.getName(pl[i].uuid))
                 i++;
             }
+            let time2 = new Date();
+            log.info(new Date(time2 - time1).toISOString().split("T")[1])
             i = 0;
             for (p of pl) {
                 //check if blacklist, change emoji depending on bl 
-                formattedList += `${p.rank[0].emoji} ${ppl[i][ppl[i].length - 1].name} ${(p.rank2 && p.rank2.length > 0) ? p.rank2[0].emoji : ""} \n`;
+                formattedList += `${p.rank[0].emoji} ${playerNames[i].name} ${(p.rank2 && p.rank2.length > 0) ? p.rank2[0].emoji : ""} \n`;
                 i++;
             }
+
             embed.setDescription(formattedList);
         }
         else if (pl)
@@ -64,7 +71,7 @@ module.exports.run = async ({ message, args, prefix }) => {
     }
     else {
         message.channel.send(new MessageEmbed()
-            .setColor(COLOR.WARN)
+            .setColor(COLOR.ERROR)
             .setTitle("Teams")
             .setDescription("No teams have been found by that name."))
         log.error("Teams DB could not load.")
