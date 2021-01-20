@@ -11,7 +11,7 @@ module.exports = class _MinecaftAPI {
     static async getUuid(name) {
         if (name == null) return null;
         let { data } = await axios.post(`https://api.mojang.com/profiles/minecraft`, [name]);
-        return data[0];
+        return data[0].id;
 
     }
 
@@ -24,7 +24,7 @@ module.exports = class _MinecaftAPI {
         if (uuid == null) return null;
         let { data } = await axios.get(`https://sessionserver.mojang.com/session/minecraft/profile/${uuid}`);//`https://api.mojang.com/user/profiles/${uuid}/names`);
 
-        return data
+        return data.name
 
     }
 
