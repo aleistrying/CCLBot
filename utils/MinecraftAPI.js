@@ -10,9 +10,14 @@ module.exports = class _MinecaftAPI {
 
     static async getUuid(name) {
         if (name == null) return null;
-        let { data } = await axios.post(`https://api.mojang.com/profiles/minecraft`, [name]);
-        return data[0].id;
+        try {
+            let { data } = await axios.post(`https://api.mojang.com/profiles/minecraft`, [name]);
+            return data[0].id;
 
+        }
+        catch (e) {
+            return undefined;
+        }
     }
 
     /**
