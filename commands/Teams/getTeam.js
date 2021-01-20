@@ -63,10 +63,11 @@ module.exports.run = async ({ message, args, prefix }) => {
         let embed = new MessageEmbed()
             .setTitle("Teams")
         if (tm && tm.length > 0 && pl && pl.length > 0) {
+            // console.log("logo", (/^http/g).test(tm[0].logo), ((/^http/g).test(tm[0].logo) == true) ? tm[0].logo : "")
             embed
                 .setColor(COLOR.INFO)
                 .setTitle(tm[0].name)
-                .setThumbnail((tm[0] && tm[0].logo && tm[0].logo.match(/^http/g) == true) ? tm[0].logo : "");
+                .setThumbnail((tm[0] && tm[0].logo && (/^http/g).test(tm[0].logo) == true) ? tm[0].logo : "");
             let formattedList = "";
             formattedList += `**Tier**\n${tm[0].wins}\n\n`;
             formattedList += `**Members**\n`;
