@@ -1,5 +1,5 @@
 {
-  "name": "microcclbot",
+  "name": "cclbot",
   "version": "1.0.0",
   "description": "This is a temporary bot for the league Champions Competitive League",
   "main": "bot.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lapron3000/MicroCCLBot.git"
+    "url": "git+https://github.com/lapron3000/CCLBot.git"
   },
   "keywords": [
     "bot",
@@ -21,9 +21,9 @@
   "author": "._.#1238 (1mejor)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lapron3000/MicroCCLBot/issues"
+    "url": "https://github.com/lapron3000/CCLBot/issues"
   },
-  "homepage": "https://github.com/lapron3000/MicroCCLBot#readme",
+  "homepage": "https://github.com/lapron3000/CCLBot#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "discord.js": "^12.5.1",

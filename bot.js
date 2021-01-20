@@ -4,7 +4,6 @@ const fs = require("fs");
 const log = require("./utils/logger");
 const COLOR = require("./utils/colors")
 const mongoose = require("mongoose");
-const Roles = require("./models/roles")
 
 // import manifest
 const manifest = JSON.parse(fs.readFileSync("./manifest.json"));
