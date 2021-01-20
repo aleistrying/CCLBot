@@ -74,6 +74,6 @@ module.exports.help = {
     command: "help",
     aliases: ["he", "h"],
     description: "Shows all commands available. If a command is added at the end, it shows the information about that command",
-    permissions: GROUP.DEFAULT,
+    permissions: GROUP.GROUP.DEFAULT,
     usage: "help [command]"
 }
