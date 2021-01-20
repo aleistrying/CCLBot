@@ -9,7 +9,7 @@ module.exports.run = async ({ message, args, prefix }) => {
     let embed = new MessageEmbed()
         .setTitle("Blacklists")
         .setColor(COLOR.ERROR);
-    let formatedEmbed = "**Player - End Date**\n";
+    let formatedEmbed = "**Player**\n";
     const blPlayers = await Blacklists.find({ uuid: { $nin: [undefined] } });
     if (blPlayers && blPlayers.length > 0) {
         let i = 0;

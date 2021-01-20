@@ -10,15 +10,15 @@ module.exports.run = async ({ message, args, prefix }) => {
         const playerUuid = await MCAPI.getUuid(args[1]);
         console.log(playerUuid)
 
-        if (playerUuid && playerUuid.id) {
-            console.log(playerUuid.id)
-            let pl = await Players.findOne({ "uuid": playerUuid.id })
+        if (playerUuid) {
+            console.log(playerUuid)
+            let pl = await Players.findOne({ "uuid": playerUuid })
             embed.setColor(COLOR.INFO)
                 .setTitle(`${playerUuid.name.replace(/_/g, "\\_")}}'s Profile`)
-                .setThumbnail(`https://crafatar.com/renders/head/${playerUuid.id}`)
+                .setThumbnail(`https://crafatar.com/renders/head/${playerUuid}`)
                 .addField("Team", (pl) ? pl.team : "None")
                 .addField("Rank", (pl) ? pl.rank : "None")
-                .addField("UUID", playerUuid.id);
+                .addField("UUID", playerUuid);
         }
         else
             embed.setColor(COLOR.WARN)
