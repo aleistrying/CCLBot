@@ -40,11 +40,12 @@ module.exports.run = async ({ message, args, prefix }) => {
         }
         else if (args[1] == '2') {
             for (team of teams) {
-                formattedList += `**${team.name}** - Member Count: ${team.players}\n`
+                embed.addField(`${team.name}`, `Member Count: ${team.players}`)
             }
         } else {
+
             for (team of teams) {
-                embed.addField(`${team.name}`, `Member Count: ${team.players}`)
+                formattedList += `**${team.name}** - Member Count: ${team.players}\n`
             }
         }
         embed.setDescription(formattedList);

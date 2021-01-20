@@ -33,6 +33,13 @@ module.exports.run = async ({ message, args, prefix }) => {
             .setTitle("Rankings")
             .setTimestamp(new Date());
         if (args[1] == "2") {
+            for (team of teams) {
+                rankings += `${team.losses}. ${team.name} - Tier: ${team.wins}\n`
+            }
+
+        }
+        else {
+
             let tiers = new Set();
             let tierTeams = new Map();
             //get the unique tiers
@@ -57,11 +64,6 @@ module.exports.run = async ({ message, args, prefix }) => {
                     rankings += `${team.losses}. ${team.name}\n`
                 }
                 rankings += "\n";
-            }
-        }
-        else {
-            for (team of teams) {
-                rankings += `${team.losses}. ${team.name} - Tier: ${team.wins}\n`
             }
         }
         // embed.addField((i == 0) ? `Tier ${tier}` : '', `${team.losses}. ${team.name} - Tier: ${team.wins}`, false)
