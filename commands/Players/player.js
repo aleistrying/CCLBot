@@ -31,7 +31,7 @@ module.exports.run = async ({ message, args, prefix }) => {
 module.exports.help = {
     command: "player",
     aliases: ["profile", "p", "getplayer", "who"],
-    "description": "Gets the information from a Player using minecraft API",
+    description: "Shows the information from a Player",
     permissions: GROUP.DEFAULT,
-    help: "player"
+    help: "player <Player Name>"
 }

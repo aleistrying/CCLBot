@@ -46,6 +46,6 @@ module.exports.help = {
     command: "getblacklists",
     aliases: ["blacklists", "bls"],
     permissions: GROUP.DEFAULT,
-    description: "Gets the blacklists for the league.",
+    description: "Shows the blacklists for the league.",
     help: "blacklists",
 }

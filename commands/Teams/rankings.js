@@ -2,6 +2,7 @@ const Teams = require('../../models/Teams');
 const { MessageEmbed } = require("discord.js");
 const COLOR = require("../../utils/colors");
 const log = require("../../utils/logger");
+const GROUP = require('../../utils/groups');
 const rankingQuery = [
     {
         '$addFields': {
@@ -80,6 +81,7 @@ module.exports.run = async ({ message, args, prefix }) => {
 module.exports.help = {
     command: "rankings",
     aliases: ["rks"],
-    "description": "Gets the information about the team",
-    "group": 0
+    description: "Gets the information about the team",
+    group: GROUP.DEFAULT,
+    usage: "rankings"
 }

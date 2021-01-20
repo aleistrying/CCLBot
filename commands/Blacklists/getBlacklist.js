@@ -56,9 +56,9 @@ module.exports.run = async ({ message, args, prefix }) => {
 }
 
 module.exports.help = {
-    command: "blacklist",
-    aliases: ["bl", "bp"],
-    description: "Gets the information from a player's blacklist",
+    command: "getblacklist",
+    aliases: ["blacklist", "bl", "bp"],
+    description: "Shows the blacklist information from a specific player",
     permissions: GROUP.DEFAULT,
-    help: "blacklist <player name>"
+    usage: "blacklist <player name>"
 }

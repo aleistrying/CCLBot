@@ -18,5 +18,6 @@ module.exports.help = {
     name: "invite",
     aliases: ["invitelink", "inv"],
     permission: Groups.DEFAULT,
-    description: "Gets the invite link of the bot",
+    description: "Shows the invite link for the bot",
+    usage: "invite"
 }

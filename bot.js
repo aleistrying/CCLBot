@@ -47,12 +47,6 @@ fs.readdir("./commands/", (err, files) => {
                 // get the command identifier
                 let commandIdentifier = file.split(".js")[0].toLowerCase();
 
-                // grab our configured commands
-                // let commandMap = new Map(Object.entries(manifest.commands));
-
-                // // grab aliases for this command
-                // let aliases = commandMap.get(commandIdentifier);
-
                 // if the command has aliases, load them
                 if (command.help && command.help.aliases) {
                     for (alias of command.help.aliases) {
@@ -99,18 +93,28 @@ client.on("message", (message) => {
         const command = args[0].toLowerCase();
 
         try {
+            // Logs who is running the command, what channel and what guild.
             log.info(`[${message.guild.name}#${message.channel.name} - ${message.author.tag}] ${message.content}`)
-            commands.get(command).run({
-                message: message,
-                args: args,
-                prefix: prefix,
-            });
+            console.log(message.member, message.member.permissions)
+            if (manifest.owners.includes(message.member.id) || hasPermissions(message.member.permissions)) { //runs the command given.
+                commands.get(command).run({
+                    message: message,
+                    args: args,
+                    prefix: prefix,
+                });
+            }
+            else {
+                let embed = new MessageEmbed()
+                    .setColor(COLOR.WARN)
+                    .setDescription("You do not have enough permissions to run this command.")
+                message.channel.send(embed)
+            }
         } catch (err) {
-            log.error("running command", err);
+            log.error("failing command", err);
             log.warn(`Tried to run command "${command}" but it doesn't exist.`);
             let embed = new MessageEmbed()
                 .setColor(COLOR.WARN)
-                .setAuthor(`Tried to run command "${command}" but it doesn't exist.`);
+                .setDescription(`Tried to run command "${command}" but it doesn't exist.`);
             message.channel.send(embed)
         }
     }

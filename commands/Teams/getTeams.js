@@ -63,6 +63,7 @@ module.exports.run = async ({ message, args, prefix }) => {
 module.exports.help = {
     command: "getteams",
     aliases: ["teams", "lt", "listteams", "*t"],
-    description: "Shows all the teams with their members",
-    group: GROUP.DEFAULT
+    description: "Shows all the teams in the league",
+    group: GROUP.DEFAULT,
+    usage: "getteams"
 }
