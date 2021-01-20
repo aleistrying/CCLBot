@@ -14,7 +14,7 @@ module.exports.run = async ({ message, args, prefix }) => {
             console.log(playerUuid)
             let pl = await Players.findOne({ "uuid": playerUuid })
             embed.setColor(COLOR.INFO)
-                .setTitle(`${playerUuid.name.replace(/_/g, "\\_")}}'s Profile`)
+                .setTitle(`${args[1].replace(/_/g, "\\_")}}'s Profile`)
                 .setThumbnail(`https://crafatar.com/renders/head/${playerUuid}`)
                 .addField("Team", (pl) ? pl.team : "None")
                 .addField("Rank", (pl) ? pl.rank : "None")
