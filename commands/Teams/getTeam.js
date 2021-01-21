@@ -7,12 +7,7 @@ const MCAPI = require("../../utils/MinecraftAPI");
 const log = require("../../utils/logger")
 module.exports.run = async ({ message, args, prefix }) => {
     if (args[1]) {
-        const tm = await Teams.aggregate([
-            {
-                "$match": { "name": new RegExp(args[1], 'i') }
-            }
-        ]);
-        const pl = await Players.aggregate([
+        const plQuery = await Players.aggregate([
             {
                 '$lookup': {
                     'from': 'blacklists',
@@ -58,8 +53,26 @@ module.exports.run = async ({ message, args, prefix }) => {
                 '$match': {
                     'team': new RegExp(args[1], 'i')
                 }
+            }, {
+                '$group': {
+                    '_id': '$team',
+                    'players': {
+                        '$addToSet': '$$ROOT'
+                    }
+                }
             }
         ]);
+
+        const tm = await Teams.aggregate([
+            {
+                "$match": { "name": new RegExp(plQuery[0]._id, 'i') }//new RegExp(args[1], 'i') }
+            }
+        ]);
+
+        //To set the first team found
+        const pl = plQuery[0].players;
+        // console.log(pl)
+
         let embed = new MessageEmbed()
             .setTitle("Teams")
         if (tm && tm.length > 0 && pl && pl.length > 0) {
@@ -72,7 +85,6 @@ module.exports.run = async ({ message, args, prefix }) => {
             formattedList += `**Tier**\n${tm[0].wins}\n\n`;
             formattedList += `**Members**\n`;
             let i = 0;
-
             let time1 = new Date();
             while (i < pl.length) {
                 pl[i].name = await MCAPI.getName(pl[i].uuid)
@@ -97,8 +109,7 @@ module.exports.run = async ({ message, args, prefix }) => {
 
             for (p of pl) {
                 //check if blacklist, change emoji depending on bl 
-                formattedList += `${p.rank[0].emoji} ${p.name.replace(/_/g, "\\_")} ${(p.rank2 && p.rank2.length > 0) ? p.rank2[0].emoji : ""} \n`;
-
+                formattedList += `${p.rank[0].emoji} ${p.name.replace(/_/g, "\\_")} ${(p.rank2 && p.rank2.length > 0) ? p.rank2[0].emoji : ""}\n`;
             }
 
             embed.setDescription(formattedList);
