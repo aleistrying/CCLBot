@@ -1,6 +1,6 @@
 const Teams = require('../../models/Teams');
 const { MessageEmbed } = require("discord.js");
-const GROUP = require("../../utils/groups");
+const { GROUP } = require("../../utils/groups");
 const COLOR = require("../../utils/colors")
 const teamsQuery = [
     {
@@ -61,10 +61,12 @@ module.exports.run = async ({ message, args, prefix }) => {
 
 }
 
-module.exports.help = {
-    command: "getteams",
-    aliases: ["teams", "lt", "listteams", "*t"],
-    description: "Shows all the teams in the league",
-    group: GROUP.DEFAULT,
-    usage: "getteams"
-}
+module.exports.help = (async () => {
+    return {
+        command: "getteams",
+        aliases: ["teams", "lt", "listteams", "*t"],
+        description: "Shows all the teams in the league",
+        permission: (await GROUP).DEFAULT,
+        usage: "getteams"
+    }
+})()

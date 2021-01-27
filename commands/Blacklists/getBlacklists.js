@@ -2,7 +2,7 @@ const Blacklists = require("../../models/Blacklists");
 const { MessageEmbed } = require("discord.js");
 const COLOR = require("../../utils/colors");
 const MCAPI = require("../../utils/MinecraftAPI")
-const GROUP = require("../../utils/groups");
+const { GROUP } = require("../../utils/groups");
 const log = require("../../utils/logger");
 
 module.exports.run = async ({ message, args, prefix }) => {
@@ -42,10 +42,12 @@ module.exports.run = async ({ message, args, prefix }) => {
 }
 
 
-module.exports.help = {
-    command: "getblacklists",
-    aliases: ["blacklists", "bls"],
-    permissions: GROUP.DEFAULT,
-    description: "Shows the blacklists for the league.",
-    help: "blacklists",
-}
+module.exports.help = (async () => {
+    return {
+        command: "getblacklists",
+        aliases: ["blacklists", "bls"],
+        permissions: (await GROUP).DEFAULT,
+        description: "Shows the blacklists for the league.",
+        help: "blacklists",
+    }
+})()

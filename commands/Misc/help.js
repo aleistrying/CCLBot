@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const COLOR = require("../../utils/colors");
-const GROUP = require("../../utils/groups");
+const { GROUP, parseGroup } = require("../../utils/groups");
 const log = require("../../utils/logger");
 const fs = require("fs");
 module.exports.run = async ({ message, args, prefix }) => {
@@ -44,18 +44,23 @@ module.exports.run = async ({ message, args, prefix }) => {
                 for (command of commands) {
 
                     const cmd = require(`../${subfolder}/${command}`)
-
-                    if (cmd && cmd.help) {
-                        if (args[1] == cmd.help.command || (cmd.help.aliases && cmd.help.aliases.includes(args[1]))) {
+                    // if (cmd.permissions == getUserPermissions())
+                    //     break;  
+                    let help = await cmd.help;
+                    if (cmd && help) {
+                        if (args[1] == help.command || (help.aliases && help.aliases.includes(args[1]))) {
                             found = true;
-                            embed.setTitle(`Bot Command ${cmd.help.command}`)
-                            let alias = cmd.help.aliases.toString().toLowerCase().replace(/\.js/g, "").replace(/,/g, ", "),
-                                desc = cmd.help.description,
-                                usage = cmd.help.usage;
-                            embed.addField("Command", cmd.help.command);
+                            embed.setTitle(`Bot Command _${help.command}_`)
+                            let alias = help.aliases.toString().toLowerCase().replace(/\.js/g, "").replace(/,/g, ", "),
+                                desc = help.description,
+                                usage = help.usage;
+                            perm = help.permission;
+                            console.log(help)
+                            embed.addField("Command", help.command);
                             if (alias) embed.addField("Aliases", alias)
                             if (desc) embed.addField("Description", desc)
                             if (usage) embed.addField("Usage", usage)
+                            if (String(perm)) embed.addField("Permissions", (await parseGroup)[perm])
                             break;
                         }
                     }
@@ -70,10 +75,12 @@ module.exports.run = async ({ message, args, prefix }) => {
     message.channel.send(embed)
 }
 
-module.exports.help = {
-    command: "help",
-    aliases: ["he", "h"],
-    description: "Shows all commands available. If a command is added at the end, it shows the information about that command",
-    permissions: GROUP.GROUP.DEFAULT,
-    usage: "help [command]"
-}
+module.exports.help = (async () => {
+    return {
+        command: "help",
+        aliases: ["he", "h"],
+        description: "Shows all commands available. If a command is added at the end, it shows the information about that command",
+        permissions: (await GROUP).DEFAULT,
+        usage: "help [command]"
+    }
+})()

@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const COLOR = require("../../utils/colors");
-const GROUP = require("../../utils/groups");
+const { GROUP } = require("../../utils/groups");
 const log = require("../../utils/logger");
 const MCAPI = require("../../utils/MinecraftAPI");
 const Players = require("../../models/Players");
@@ -29,10 +29,12 @@ module.exports.run = async ({ message, args, prefix }) => {
     message.channel.send(embed)
 }
 
-module.exports.help = {
-    command: "player",
-    aliases: ["profile", "p", "getplayer", "who"],
-    description: "Shows the information from a Player",
-    permissions: GROUP.DEFAULT,
-    help: "player <Player Name>"
-}
+module.exports.help = (async () => {
+    return {
+        command: "player",
+        aliases: ["profile", "p", "getplayer", "who"],
+        description: "Shows the information from a Player",
+        permissions: (await GROUP).DEFAULT,
+        help: "player <Player Name>"
+    }
+})()

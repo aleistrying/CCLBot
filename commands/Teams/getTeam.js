@@ -1,7 +1,7 @@
 const Teams = require('../../models/Teams');
 const Players = require("../../models/Players");
 const { MessageEmbed } = require("discord.js");
-const GROUP = require("../../utils/groups");
+const { GROUP } = require("../../utils/groups");
 const COLOR = require("../../utils/colors");
 const MCAPI = require("../../utils/MinecraftAPI");
 const log = require("../../utils/logger")
@@ -134,10 +134,12 @@ module.exports.run = async ({ message, args, prefix }) => {
 
 }
 
-module.exports.help = {
-    command: "getteam",
-    aliases: ["roster", "r", "team", "t"],
-    description: "Shows the selected team's rosters",
-    group: GROUP.DEFAULT,
-    usage: "getteam <Team Name>"
-}
+module.exports.help = (async () => {
+    return {
+        command: "getteam",
+        aliases: ["roster", "r", "team", "t"],
+        description: "Shows the selected team's rosters",
+        permission: (await GROUP).DEFAULT,
+        usage: "getteam <Team Name>"
+    }
+})()

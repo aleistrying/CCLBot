@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 const COLOR = require("../../utils/colors");
-const GROUP = require("../../utils/groups");
+const { GROUP } = require("../../utils/groups");
 const log = require("../../utils/logger");
 const Blacklists = require("../../models/Blacklists");
 const MCAPI = require("../../utils/MinecraftAPI");
@@ -55,10 +55,12 @@ module.exports.run = async ({ message, args, prefix }) => {
     message.channel.send(embed)
 }
 
-module.exports.help = {
-    command: "getblacklist",
-    aliases: ["blacklist", "bl", "bp"],
-    description: "Shows the blacklist information from a specific player",
-    permissions: GROUP.DEFAULT,
-    usage: "blacklist <player name>"
-}
+module.exports.help = (async () => {
+    return {
+        command: "getblacklist",
+        aliases: ["blacklist", "bl", "bp"],
+        description: "Shows the blacklist information from a specific player",
+        permissions: (await GROUP).DEFAULT,
+        usage: "blacklist <player name>"
+    }
+})()
