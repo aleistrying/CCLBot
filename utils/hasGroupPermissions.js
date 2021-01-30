@@ -4,10 +4,10 @@ const { parseGroup, GROUP } = require("./groups");
 const logger = require("./logger");
 
 module.exports = async function hasGroupPermissions(discordUser, command) {
-    console.log((await command.help).permission)
+    // console.log((await command.help).permission)
     let cmdPerm = (await command.help).permission,
         userId = discordUser.user.id
-    console.log(userId, cmdPerm)
+    // console.log(userId, cmdPerm)
     try {
         const perm = await PERMISSIONS.findOne({ "discordId": Number(userId) });
         if (perm && perm.groups.length > 0) {
