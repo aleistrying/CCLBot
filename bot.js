@@ -4,6 +4,7 @@ const fs = require("fs");
 const log = require("./utils/logger");
 const COLOR = require("./utils/colors")
 const mongoose = require("mongoose");
+const hasGroupPermissions = require("./utils/hasGroupPermissions")
 
 // import manifest
 const manifest = JSON.parse(fs.readFileSync("./manifest.json"));
@@ -35,7 +36,7 @@ fs.readdir("./commands/", (err, files) => {
     // filter the submodules
     files
         .filter((file) => file.split(".").length == 1)
-        .forEach((subfolder, i) => {
+        .forEach(async (subfolder, i) => {
             let modules = fs
                 .readdirSync(`./commands/${subfolder}`)
                 .filter((file) => file.endsWith(".js"));
@@ -48,8 +49,9 @@ fs.readdir("./commands/", (err, files) => {
                 let commandIdentifier = file.split(".js")[0].toLowerCase();
 
                 // if the command has aliases, load them
-                if (command.help && command.help.aliases) {
-                    for (alias of command.help.aliases) {
+                let help = await command.help;
+                if (help && help.aliases) {
+                    for (alias of help.aliases) {
                         commands.set(alias, command);
                     }
                 }
@@ -75,7 +77,7 @@ client.on("ready", () => {
 
 });
 
-client.on("message", (message) => {
+client.on("message", async (message) => {
     // check conditionals in which we don't want the bot to "listen"
     if (message.author.bot) return;
     if (message.channel.type === "dm") return;
@@ -98,19 +100,23 @@ client.on("message", (message) => {
             // console.log(message.member.roles.cache, message.author.permissions)
             // console.log(commands.get(command).help)
             //if (//manifest.owners.includes(message.author.id) ||
-            //  hasRolePermissions(message.member.roles.cache, commands.get(command).help.permission)) {//|| hasPermissions(commands.get(command), message.author.permissions)) { //runs the command given.
-            commands.get(command).run({
-                message: message,
-                args: args,
-                prefix: prefix,
-            });
-            /*}
+            //|| hasPermissions(commands.get(command), message.author.permissions)) { //runs the command given.
+
+            console.log(commands.get(command))
+            console.log(await hasGroupPermissions(message.member, commands.get(command)))
+            if (await hasGroupPermissions(message.member, commands.get(command))) {
+                commands.get(command).run({
+                    message: message,
+                    args: args,
+                    prefix: prefix,
+                });
+            }
             else {
                 let embed = new MessageEmbed()
                     .setColor(COLOR.WARN)
                     .setDescription("You do not have enough permissions to run this command.")
                 message.channel.send(embed)
-            }*/
+            }
         } catch (err) {
             log.error("failing command", err);
             log.warn(`Tried to run command "${command}" but it doesn't exist.`);
@@ -123,36 +129,3 @@ client.on("message", (message) => {
 });
 
 client.login(manifest.bot.token);// import default libs
-const hasRolePermissions = async (discordRoles, requiredPermissions) => {
-    let roles = Array.from(discordRoles, ([name, value]) => name);
-    console.log("first", roles, requiredPermissions)
-    // console.log(roles)
-    let role = await Roles.aggregate([
-        {
-            '$match': {
-                'discordRole': {
-                    '$in': roles
-                }
-            }
-        }, {
-            '$group': {
-                '_id': null,
-                'roleId': {
-                    '$max': '$groupId'
-                }
-            }
-        }
-    ]);
-    console.log("role", role)
-    if (role && role.length > 0) {
-        console.log("role.roleid", role[0].roleId, "req|", requiredPermissions)
-        if (role[0].roleId >= requiredPermissions) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    else
-        return false;
-}

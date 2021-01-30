@@ -60,6 +60,7 @@ module.exports.run = async ({ message, args, prefix }) => {
                             if (alias) embed.addField("Aliases", alias)
                             if (desc) embed.addField("Description", desc)
                             if (usage) embed.addField("Usage", usage)
+                            console.log((await parseGroup)[perm])
                             if (String(perm)) embed.addField("Permissions", (await parseGroup)[perm])
                             break;
                         }
@@ -80,7 +81,7 @@ module.exports.help = (async () => {
         command: "help",
         aliases: ["he", "h"],
         description: "Shows all commands available. If a command is added at the end, it shows the information about that command",
-        permissions: (await GROUP).DEFAULT,
+        permission: (await GROUP).DEFAULT,
         usage: "help [command]"
     }
 })()

@@ -1,9 +1,10 @@
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 
-// const PermissionsSchema = new mongoose.Schema({
-//     discordId: { type: Number, required: true },
-//     roleIds: { type: Array, required: true, default: [1] },
-// })
+const PermissionsSchema = new mongoose.Schema({
+    discordId: { type: Number, required: true },
+    groups: { type: Array, required: true, default: ["DEFAULT"] },
+    commands: { type: Array, required: false, default: [] }
+})
 
-// module.exports = mongoose.model("permissions", PermissionsSchema);
+module.exports = mongoose.model("permissions", PermissionsSchema);
