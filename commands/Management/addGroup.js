@@ -60,7 +60,7 @@ module.exports.help = (async () => {
         command: "getblacklist",
         aliases: ["blacklist", "bl", "bp"],
         description: "Shows the blacklist information from a specific player",
-        permission: (await GROUP).DEFAULT,
+        permission: (await GROUP).ADMIN,
         usage: "blacklist <player name>"
     }
 })()
