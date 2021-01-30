@@ -102,8 +102,8 @@ client.on("message", async (message) => {
             //if (//manifest.owners.includes(message.author.id) ||
             //|| hasPermissions(commands.get(command), message.author.permissions)) { //runs the command given.
 
-            console.log(commands.get(command))
-            console.log(await hasGroupPermissions(message.member, commands.get(command)))
+            // console.log(commands.get(command))
+            // console.log(await hasGroupPermissions(message.member, commands.get(command)))
             if (await hasGroupPermissions(message.member, commands.get(command))) {
                 commands.get(command).run({
                     message: message,
