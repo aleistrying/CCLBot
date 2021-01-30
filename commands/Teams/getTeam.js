@@ -7,75 +7,84 @@ const MCAPI = require("../../utils/MinecraftAPI");
 const log = require("../../utils/logger")
 module.exports.run = async ({ message, args, prefix }) => {
     if (args[1]) {
-        const plQuery = await Players.aggregate([
-            {
-                '$lookup': {
-                    'from': 'blacklists',
-                    'localField': 'uuid',
-                    'foreignField': 'uuid',
-                    'as': 'blacklist'
-                }
-            }, {
-                '$set': {
-                    'rank': {
-                        '$cond': {
-                            'if': {
-                                '$eq': [
-                                    {
-                                        '$size': {
-                                            '$ifNull': [
-                                                '$blacklist', []
-                                            ]
-                                        }
-                                    }, 0
-                                ]
-                            },
-                            'then': '$rank',
-                            'else': 'Blacklist'
-                        }
-                    }
-                }
-            }, {
-                '$lookup': {
-                    'from': 'ranks',
-                    'localField': 'rank',
-                    'foreignField': 'name',
-                    'as': 'rank'
-                }
-            }, {
-                '$lookup': {
-                    'from': 'ranks',
-                    'localField': 'rank2',
-                    'foreignField': 'name',
-                    'as': 'rank2'
-                }
-            }, {
-                '$match': {
-                    'team': new RegExp(args[1], 'i')
-                }
-            }, {
-                '$group': {
-                    '_id': '$team',
-                    'players': {
-                        '$addToSet': '$$ROOT'
-                    }
-                }
-            }
-        ]);
 
-        const tm = await Teams.aggregate([
-            {
-                "$match": { "name": new RegExp(plQuery[0]._id, 'i') }//new RegExp(args[1], 'i') }
-            }
-        ]);
 
-        //To set the first team found
-        const pl = plQuery[0].players;
         // console.log(pl)
 
         let embed = new MessageEmbed()
-            .setTitle("Teams")
-        if (tm && tm.length > 0 && pl && pl.length > 0) {
+            .setTitle("Team")
+
+
+
+        const tm = await Teams.aggregate([
+            {
+                "$match": { "name": new RegExp(args[1], 'i') }//new RegExp(args[1], 'i') }
+            }
+        ]);
+        let plQuery = [];
+
+        if (tm[0]) {
+            plQuery = await Players.aggregate([
+                {
+                    '$lookup': {
+                        'from': 'blacklists',
+                        'localField': 'uuid',
+                        'foreignField': 'uuid',
+                        'as': 'blacklist'
+                    }
+                }, {
+                    '$set': {
+                        'rank': {
+                            '$cond': {
+                                'if': {
+                                    '$eq': [
+                                        {
+                                            '$size': {
+                                                '$ifNull': [
+                                                    '$blacklist', []
+                                                ]
+                                            }
+                                        }, 0
+                                    ]
+                                },
+                                'then': '$rank',
+                                'else': 'Blacklist'
+                            }
+                        }
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'ranks',
+                        'localField': 'rank',
+                        'foreignField': 'name',
+                        'as': 'rank'
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'ranks',
+                        'localField': 'rank2',
+                        'foreignField': 'name',
+                        'as': 'rank2'
+                    }
+                }, {
+                    '$match': {
+                        'team': new RegExp(tm[0].name, 'i')
+                    }
+                }, {
+                    '$group': {
+                        '_id': '$team',
+                        'players': {
+                            '$addToSet': '$$ROOT'
+                        }
+                    }
+                }
+            ]);
+        }
+
+        if (tm && tm.length > 0 && plQuery.length > 0) {
+
+            const pl = plQuery[0].players;
+
             // console.log("logo", (/^http/g).test(tm[0].logo), ((/^http/g).test(tm[0].logo) == true) ? tm[0].logo : "")
             embed
                 .setColor(COLOR.INFO)
@@ -114,14 +123,14 @@ module.exports.run = async ({ message, args, prefix }) => {
 
             embed.setDescription(formattedList);
         }
-        else if (pl)
+        else if (!tm[0])
             embed.setColor(COLOR.ERROR)
-                .setDescription("No team Found")
-        else if (!tm)
+                .setDescription("No Team found")
+        else if (plQuery.length == 0)
             embed.setColor(COLOR.ERROR)
-                .setDescription("No Players found Found")
+                .setDescription("No Players found")
         else embed.setColor(COLOR.ERROR)
-            .setDescription("No players and Teams Set")
+            .setDescription("No players and Teams set")
         message.channel.send(embed)
     }
     else {
