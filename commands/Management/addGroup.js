@@ -57,10 +57,10 @@ module.exports.run = async ({ message, args, prefix }) => {
 
 module.exports.help = (async () => {
     return {
-        command: "getblacklist",
-        aliases: ["blacklist", "bl", "bp"],
+        command: "addgroup",
+        aliases: [],
         description: "Shows the blacklist information from a specific player",
         permission: (await GROUP).ADMIN,
-        usage: "blacklist <player name>"
+        usage: "addgroup <player name>"
     }
 })()
