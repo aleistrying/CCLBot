@@ -1,7 +1,7 @@
 const { GROUP } = require("../../utils/groups");
 const { MessageEmbed } = require('discord.js')
 const logger = require('../../utils/logger');
-const Colors = require("../../utils/Colors");
+const Colors = require("../../utils/colors");
 module.exports.run = async ({ message, args, prefix }) => {
     let embed = new MessageEmbed();
     if (args[1]) {
