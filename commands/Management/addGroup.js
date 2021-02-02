@@ -6,7 +6,12 @@ const Blacklists = require("../../models/Blacklists");
 const MCAPI = require("../../utils/MinecraftAPI");
 
 module.exports.run = async ({ message, args, prefix }) => {
-
+    //things to work on -> addgroup command,
+    // -> addPlayer
+    // -> remPlayer
+    // -> addBlacklist
+    // -> remBlacklist
+    // -> help command shown permissions
     let embed = new MessageEmbed()
     if (args[1]) {
         let plUuid = await MCAPI.getUuid(args[1]);

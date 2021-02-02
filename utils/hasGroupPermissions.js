@@ -3,10 +3,10 @@ const PERMISSIONS = require("../models/Permissions");
 const { parseGroup, GROUP } = require("./groups");
 const logger = require("./logger");
 
-module.exports = async function hasGroupPermissions(discordUser, command) {
+module.exports = async function hasGroupPermissions(discordId, command) {
     // console.log((await command.help).permission)
     let cmdPerm = (await command.help).permission,
-        userId = discordUser.user.id
+        userId = discordId
     // console.log(userId, cmdPerm)
     try {
         const perm = await PERMISSIONS.findOne({ "discordId": Number(userId) });
@@ -33,7 +33,7 @@ module.exports = async function hasGroupPermissions(discordUser, command) {
             return true;
         }
         else {
-            logger.error("Did not find permissions")
+            logger.error("Did not find permissions for this person.")
             return false;
         }
     }

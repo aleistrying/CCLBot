@@ -1,12 +1,15 @@
 const { MessageEmbed } = require("discord.js");
 const COLOR = require("../../utils/colors");
 const { GROUP, parseGroup } = require("../../utils/groups");
+const Permissions = require("../../models/Permissions");
+const hasGroupPermissions = require("../../utils/hasGroupPermissions")
 const log = require("../../utils/logger");
 const fs = require("fs");
 module.exports.run = async ({ message, args, prefix }) => {
 
     let embed = new MessageEmbed()
         .setColor(COLOR.INFO);
+    // let discId = message || await message.guild.members.fetch(args[1]); 
     let formattedText = "";
     if (!args[1] || args[1].length == 0) {
         embed.setTitle("Bot Commands");
@@ -18,14 +21,21 @@ module.exports.run = async ({ message, args, prefix }) => {
 
         for (subfolder of files) {
             if (!subfolder.endsWith(".js")) {
-                formattedText += `**${subfolder}**\n`;
                 const commands = fs.readdirSync(`./commands/${subfolder}`);
+
                 commands.sort()
-                if (commands) {
-                    formattedText += `${commands.toString().toLowerCase().replace(/\.js/g, "").replace(/,/g, ", ")}\n`;
+                let shownCommands = [];
+                for (command of commands) {
+                    const cmd = require(`../${subfolder}/${command}`)
+                    if (await hasGroupPermissions(message.author.id, cmd)) {
+                        shownCommands.push((await cmd.help).command)
+                    }
+                }
+                if (shownCommands && shownCommands.length != 0) {
+                    formattedText += `**${subfolder}**\n`;
+                    formattedText += `${shownCommands.map(val => `\`${val}\``).toString().toLowerCase().replace(/\.js/g, "").replace(/,/g, ", ")}\n\n`;
                 }
             }
-            formattedText += "\n"
         }
 
         embed.setDescription(formattedText)
@@ -49,27 +59,28 @@ module.exports.run = async ({ message, args, prefix }) => {
                     let help = await cmd.help;
                     if (cmd && help) {
                         if (args[1] == help.command || (help.aliases && help.aliases.includes(args[1]))) {
-                            found = true;
-                            embed.setTitle(`Bot Command _${help.command}_`)
-                            let alias = help.aliases.toString().toLowerCase().replace(/\.js/g, "").replace(/,/g, ", "),
-                                desc = help.description,
-                                usage = help.usage;
-                            perm = help.permission;
-                            console.log(help)
-                            embed.addField("Command", help.command);
-                            if (alias) embed.addField("Aliases", alias)
-                            if (desc) embed.addField("Description", desc)
-                            if (usage) embed.addField("Usage", usage)
-                            console.log((await parseGroup)[perm])
-                            if (String(perm)) embed.addField("Permissions", (await parseGroup)[perm])
+                            if (await hasGroupPermissions(message.author.id, cmd)) {
+                                embed.setTitle(`Bot Command _${help.command}_`)
+                                let alias = help.aliases.toString().toLowerCase().replace(/\.js/g, "").replace(/,/g, ", "),
+                                    desc = help.description,
+                                    usage = help.usage;
+                                perm = help.permission;
+                                embed.addField("Command", help.command);
+                                if (alias) embed.addField("Aliases", alias)
+                                if (desc) embed.addField("Description", desc)
+                                if (usage) embed.addField("Usage", usage)
+                                if (String(perm)) embed.addField("Permissions", (await parseGroup)[perm])
+                                found = true;
+                            }
                             break;
                         }
                     }
                 }
+                if (found) break;
             }
         }
         if (!found) {
-            embed.setTitle("Commands")
+            embed.setTitle("Bot Command")
                 .setDescription("Command Not Found")
         }
     }

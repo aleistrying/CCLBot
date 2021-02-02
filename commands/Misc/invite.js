@@ -18,7 +18,7 @@ module.exports.run = async ({ message, args, prefix }) => {
 
 module.exports.help = (async () => {
     return {
-        name: "invite",
+        command: "invite",
         aliases: ["invitelink", "inv"],
         permission: (await GROUP).DEFAULT,
         description: "Shows the invite link for the bot",

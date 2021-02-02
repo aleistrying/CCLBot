@@ -104,7 +104,7 @@ client.on("message", async (message) => {
 
             // console.log(commands.get(command))
             // console.log(await hasGroupPermissions(message.member, commands.get(command)))
-            if (await hasGroupPermissions(message.member, commands.get(command))) {
+            if (await hasGroupPermissions(message.author.id, commands.get(command))) {
                 commands.get(command).run({
                     message: message,
                     args: args,
