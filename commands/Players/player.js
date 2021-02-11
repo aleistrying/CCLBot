@@ -8,11 +8,12 @@ module.exports.run = async ({ message, args, prefix }) => {
     let embed = new MessageEmbed();
     if (args[1]) {
         const playerUuid = await MCAPI.getUuid(args[1]);
+        const playerName = await MCAPI.getName(playerUuid);
 
         if (playerUuid) {
             let pl = await Players.findOne({ "uuid": playerUuid })
             embed.setColor(COLOR.INFO)
-                .setTitle(`${args[1].replace(/_/g, "\\_")}'s Profile`)
+                .setTitle(`${playerName.replace(/_/g, "\\_")}'s Profile`)
                 .setThumbnail(`https://crafatar.com/renders/head/${playerUuid}`)
                 .addField("Team", (pl) ? pl.team : "None")
                 .addField("Rank", (pl) ? pl.rank : "None")
