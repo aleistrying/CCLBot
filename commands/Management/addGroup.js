@@ -64,8 +64,8 @@ module.exports.help = (async () => {
     return {
         command: "addgroup",
         aliases: [],
-        description: "Shows the blacklist information from a specific player",
-        permission: (await GROUP).ADMIN,
-        usage: "addgroup <player name>"
+        description: "Gives a discord user a certain permission group.",
+        permission: (await GROUP).OWNER,
+        usage: "addgroup [Discord Tag|Discord Id]"
     }
 })()

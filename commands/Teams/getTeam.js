@@ -149,6 +149,6 @@ module.exports.help = (async () => {
         aliases: ["roster", "r", "team", "t"],
         description: "Shows the selected team's rosters",
         permission: (await GROUP).DEFAULT,
-        usage: "getteam <Team Name>"
+        usage: "getteam [Team Name]"
     }
 })()

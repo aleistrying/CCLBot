@@ -8,36 +8,31 @@ const MCAPI = require("../../utils/MinecraftAPI");
 
 module.exports.run = async ({ message, args, prefix }) => {
     let embed = new MessageEmbed()
-        .setTitle("Add Member")
+        .setTitle("Remove Member")
         .setColor(COLOR.INFO)
-    if (args[1] && args[2]) {
+    if (args[1]) {
         let uuid = await MCAPI.getUuid(args[1]);
         let oldPl = await Players.findOne({ uuid: uuid });
-        const tm = await Teams.findOne({ name: new RegExp(args[2], 'i') })
 
-        if (uuid && tm) {
+        if (uuid) {
             const pl = await Players.findOneAndUpdate({ uuid: uuid },
-                { team: tm.name },
+                { team: null },
                 { upsert: true, setDefaultsOnInsert: true, new: true, rawResult: true });
 
-            if (pl && oldPl && pl.value.team != oldPl.team) {
+            if (pl && oldPl && oldPl.team != null) {
                 embed
                     .setColor(COLOR.SUCCESS)
-                    .setDescription(`Player has been added to ${tm.name} and removed from ${oldPl.team}.`);
+                    .setDescription(`Player has been removed from ${oldPl.team}.`);
 
             }
-            else if (pl && oldPl && pl.value.team == oldPl.team) {
-                embed.setColor(COLOR.WARN).setDescription(`Player is already in ${pl.value.team}.`)
-            }
-            else if (pl && !oldPl) {
+            else if (pl && oldPl && oldPl.team == null) {
                 embed
-                    .setColor(COLOR.SUCCESS)
-                    .setDescription(`Player has been added to ${tm.name}`);
+                    .setColor(COLOR.WARN)
+                    .setDescription(`Player is not on a team.`);
             }
             else {
                 log.info("error ", pl, oldPl)
-
-                embed.setColor(COLOR.ERROR).setDescription("Data could not be updated. Contact ._.#1238.")
+                embed.setColor(COLOR.ERROR).setDescription("Data could not be updated. Contact ._.#1238")
             }
         } else if (!uuid) {
             embed.setColor(COLOR.WARN).setDescription("Player was not found.")
@@ -49,19 +44,16 @@ module.exports.run = async ({ message, args, prefix }) => {
     else if (!args[1]) {
         embed.setColor(COLOR.WARN).setDescription("Player argument is required.")
     }
-    else if (!args[2]) {
-        embed.setColor(COLOR.WARN).setDescription("Team argument is required.")
-    }
     message.channel.send(embed)
 }
 
 module.exports.help = (async () => {
     return {
-        command: "addmember",
-        aliases: ["+member", "+m", "addmem", "add-mem"],
-        description: "Adds a player to a team, if the player is on a team already it removes them.",
-        permission: (await GROUP).MOD,
-        usage: "addmember [User Name] [Team Name]"// <player name> <type permanent|temporary> [start_date] [end_date] <reason>"
+        command: "removeblacklist",
+        aliases: ["-b", "-blacklist", "rembl", "remblacklist"],
+        description: "Starts the blacklist wizard",
+        permission: (await GROUP).ADMIN,
+        usage: "removeblacklist [MC IGN]"// <player name> <type permanent|temporary> [start_date] [end_date] <reason>"
     }
 })()
 
