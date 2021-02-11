@@ -36,6 +36,6 @@ module.exports.help = (async () => {
         aliases: ["profile", "p", "getplayer", "who"],
         description: "Shows the information from a Player",
         permission: (await GROUP).DEFAULT,
-        help: "player <Player Name>"
+        help: "player [MC IGN]"
     }
 })()

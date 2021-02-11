@@ -61,6 +61,6 @@ module.exports.help = (async () => {
         aliases: ["blacklist", "bl", "bp"],
         description: "Shows the blacklist information from a specific player",
         permission: (await GROUP).DEFAULT,
-        usage: "blacklist <player name>"
+        usage: "blacklist [MC IGN]"
     }
 })()
