@@ -16,7 +16,7 @@ mongoose
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
-        // useFindAndModify: true,
+        useFindAndModify: false,
     }).then(() => log.info(`Connected to database ${manifest.mongoose.database}`))
     .catch((err) => log.error("db error", err.reason));
 
