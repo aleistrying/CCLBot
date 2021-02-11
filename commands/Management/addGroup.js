@@ -65,7 +65,7 @@ module.exports.help = (async () => {
         command: "addgroup",
         aliases: [],
         description: "Gives a discord user a certain permission group.",
-        permission: (await GROUP).ADMIN,
+        permission: (await GROUP).OWNER,
         usage: "addgroup [Discord Tag|Discord Id]"
     }
 })()
