@@ -285,7 +285,7 @@ module.exports.help = (async () => {
         command: "addblacklist",
         aliases: ["+blacklist", "createblacklist", "createbl", "+bl"],
         description: "Starts the blacklist wizard",
-        permission: (await GROUP).ADMIN,
+        permission: (await GROUP).REFEREE,
         usage: "addblacklist"// <player name> <type permanent|temporary> [start_date] [end_date] <reason>"
     }
 })()

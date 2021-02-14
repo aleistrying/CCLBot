@@ -50,7 +50,7 @@ module.exports.help = (async () => {
         command: "removeblacklist",
         aliases: ["-bl", "-blacklist", "rembl", "remblacklist"],
         description: "Starts the blacklist wizard",
-        permission: (await GROUP).ADMIN,
+        permission: (await GROUP).REFEREE,
         usage: "removeblacklist [MC IGN]"// <player name> <type permanent|temporary> [start_date] [end_date] <reason>"
     }
 })()

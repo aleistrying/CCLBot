@@ -9,20 +9,23 @@ module.exports = async function hasGroupPermissions(discordId, command) {
         userId = discordId
     // console.log(userId, cmdPerm)
     try {
-        const perm = await PERMISSIONS.findOne({ "discordId": Number(userId) });
-        if (perm && perm.groups.length > 0) {
-
+        const perm = await PERMISSIONS.findOne({ "discordId": Number(userId) })
+            .then(values => { if (values) { return values.groups } else return });
+        if (perm && perm.length > 0) {
+            let groups = [0];//just incase the person doesn't have the perm.
+            await perm.forEach(async group => groups.push((await GROUP)[group]))
             // console.log(perm.groups.map(async val => { return (await GROUP)[val]; }));
-            let canRunCommand = 0;
-            for (groupName of perm.groups) {
-                value = (await GROUP)[groupName];
-                if (!value) value = 0;
-                canRunCommand += await value;
-            }
+            // let canRunCommand = 0;
+            // for (groupName of perm.groups) {
+            //     value = (await GROUP)[groupName];
+            //     if (!value) value = 0;
+            //     canRunCommand += await value;
+            // }
             // console.log("perm.permid", perm, "req", cmdPerm)
             // console.log((await parseGroup)[cmdPerm])
             // console.log("can", canRunCommand, "group", perm.groups)
-            if (canRunCommand >= cmdPerm) {
+            // perm.groups = perm.groups.map(async v => ) 
+            if (groups.includes(cmdPerm)) {//canRunCommand >= cmdPerm) {
                 return true;
             }
             else {
@@ -34,6 +37,8 @@ module.exports = async function hasGroupPermissions(discordId, command) {
         }
         else {
             logger.error("Did not find permissions for this person.")
+            logger.info(`Creating user ${userId} in permissions`)
+            await new PERMISSIONS({ discordId: Number(userId) }).save();
             return false;
         }
     }

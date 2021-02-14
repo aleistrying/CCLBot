@@ -60,7 +60,7 @@ module.exports.help = (async () => {
     return {
         command: "dm",
         aliases: ["pm", "privatemessage", "message"],
-        permission: (await GROUP).ADMIN,// (await GROUPS.find({ name: "ADMIN" }))[0].groupId,
+        permission: (await GROUP).REFEREE,// (await GROUPS.find({ name: "ADMIN" }))[0].groupId,
         description: "Sends a private message to a user through the bot",
         usage: "dm [mention|id] [message]"
     }
