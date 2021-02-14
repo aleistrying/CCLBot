@@ -11,6 +11,7 @@ const manifest = JSON.parse(fs.readFileSync("./manifest.json"));
 
 //Connect to the database
 let mongodbUrl = `mongodb+srv://${manifest.mongoose.acc}:${manifest.mongoose.pass}${manifest.mongoose.node}/${manifest.mongoose.database}`;
+console.log(mongodbUrl)
 mongoose
     .connect(mongodbUrl, {
         useNewUrlParser: true,
@@ -89,7 +90,7 @@ client.on("message", async (message) => {
     if (content.indexOf(prefix) == 0) {
         // run some regex to allow easier arg querying
         const args = content.slice(1).trim().split(/ +/g);
-        log.info("args " + args)
+        // log.info("args " + args)
 
         // grab the intended command
         const command = args[0].toLowerCase();

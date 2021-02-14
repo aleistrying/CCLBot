@@ -14,13 +14,13 @@ module.exports.run = async ({ message, args, prefix }) => {
         let uuid = await MCAPI.getUuid(args[1]);
         let oldPl = await Players.findOne({ uuid: uuid });
         const tm = await Teams.findOne({ name: new RegExp(args[2], 'i') })
-
         if (uuid && tm) {
             const pl = await Players.findOneAndUpdate({ uuid: uuid },
                 { team: tm.name },
                 { upsert: true, setDefaultsOnInsert: true, new: true, rawResult: true });
 
-            if (pl && oldPl && pl.value.team != oldPl.team) {
+            if (pl && oldPl && pl.value.team != oldPl.team && oldPl.team != null) {
+                console.log(oldPl.team)
                 embed
                     .setColor(COLOR.SUCCESS)
                     .setDescription(`Player has been added to ${tm.name} and removed from ${oldPl.team}.`);
@@ -29,7 +29,7 @@ module.exports.run = async ({ message, args, prefix }) => {
             else if (pl && oldPl && pl.value.team == oldPl.team) {
                 embed.setColor(COLOR.WARN).setDescription(`Player is already in ${pl.value.team}.`)
             }
-            else if (pl && !oldPl) {
+            else if (pl && oldPl && oldPl.team == null) {
                 embed
                     .setColor(COLOR.SUCCESS)
                     .setDescription(`Player has been added to ${tm.name}`);
