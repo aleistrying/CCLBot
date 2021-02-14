@@ -11,7 +11,7 @@ const manifest = JSON.parse(fs.readFileSync("./manifest.json"));
 
 //Connect to the database
 let mongodbUrl = `mongodb+srv://${manifest.mongoose.acc}:${manifest.mongoose.pass}${manifest.mongoose.node}/${manifest.mongoose.database}`;
-console.log(mongodbUrl)
+// console.log(mongodbUrl)
 mongoose
     .connect(mongodbUrl, {
         useNewUrlParser: true,
