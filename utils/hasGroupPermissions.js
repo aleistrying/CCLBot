@@ -6,7 +6,7 @@ const logger = require("./logger");
 module.exports = async function hasGroupPermissions(discordId, command) {
     // console.log((await command.help).permission)
     let cmdPerm = (await command.help).permission,
-        userId = discordId
+        userId = String(discordId)
     // console.log(userId, cmdPerm)
     try {
         const perm = await PERMISSIONS.findOne({ "discordId": userId })
