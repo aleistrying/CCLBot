@@ -12,7 +12,7 @@ const manifest = JSON.parse(fs.readFileSync("./manifest.json"));
 //Connect to the database
 let mongodbUrl = `mongodb+srv://${manifest.mongoose.acc}:${manifest.mongoose.pass}${manifest.mongoose.node}/${manifest.mongoose.database}`;
 // console.log(mongodbUrl)
-mongoose
+let db = mongoose
     .connect(mongodbUrl, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -130,3 +130,45 @@ client.on("message", async (message) => {
 });
 
 client.login(manifest.bot.token);// import default libs
+
+
+//create backupprocess
+const cron = require('node-cron'), spawn = require('child_process').spawn;
+
+
+//creates a task that runs every 23:59:59 of everyday
+let dbBackupTask = cron.schedule('59 59 23 * * *', () => {
+    console.log("Using backup schedule")
+    mongoose.connection.on('open', function (ref) {
+        console.log('Connected to mongo server.');
+        //trying to get collection names
+        mongoose.connection.db.listCollections().toArray(function (err, names) {
+            // console.log(names); // [{ name: 'dbname.myCollection' }]
+            let directory = `./db/backup/${new Date(new Date() - 0 * 24 * 3600 * 1000).toISOString().toString().split("T")[0]}`
+            // if (!fs.existsSync(directory)) no need to check this
+            fs.mkdirSync(directory, { recursive: true })
+            //mongoexport --db #{DB_NAME}  --collection #{collection}  --host '#{DB_HOST}' --out #{collection}_dump
+            //mongodump is archiv
+
+            let backupProcess;
+            for (col of names) {
+                backupProcess = spawn('mongoexport', [
+                    `--uri=${mongodbUrl}`,
+                    `--collection=${col.name}`,
+                    `--db=${manifest.mongoose.database}`,
+                    `--out=${directory}/${col.name}.json`
+                ]);
+                backupProcess.on('exit', (code, signal) => {
+                    if (code)
+                        console.log('Backup process exited with code ', code);
+                    else if (signal)
+                        console.error('Backup process was killed with singal ', signal);
+                    else
+                        console.log('Successfully backedup the database')
+                });
+            }
+
+        });
+    })
+
+}); 

@@ -7,6 +7,11 @@
     "test": "nodemon bot.js",
     "start": "node bot.js"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "db/*"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lapron3000/CCLBot.git"
@@ -27,7 +32,8 @@
   "dependencies": {
     "axios": "^0.21.1",
     "discord.js": "^12.5.1",
-    "mongoose": "^5.11.12"
+    "mongoose": "^5.11.12",
+    "node-cron": "^2.0.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
