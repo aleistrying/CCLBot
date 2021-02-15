@@ -38,7 +38,7 @@ module.exports = async function hasGroupPermissions(discordId, command) {
         else {
             logger.error("Did not find permissions for this person.")
             logger.info(`Creating user ${userId} in permissions`)
-            await new PERMISSIONS({ discordId: Number(userId) }).save();
+            await new PERMISSIONS({ discordId: userId }).save();
             return false;
         }
     }
