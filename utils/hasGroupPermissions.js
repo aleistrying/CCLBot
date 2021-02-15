@@ -9,7 +9,7 @@ module.exports = async function hasGroupPermissions(discordId, command) {
         userId = discordId
     // console.log(userId, cmdPerm)
     try {
-        const perm = await PERMISSIONS.findOne({ "discordId": Number(userId) })
+        const perm = await PERMISSIONS.findOne({ "discordId": userId })
             .then(values => { if (values) { return values.groups } else return });
         if (perm && perm.length > 0) {
             let groups = [0];//just incase the person doesn't have the perm.

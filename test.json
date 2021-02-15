@@ -1,0 +1,88 @@
+[
+  {
+    "discordId": "753154079152406579",
+    "groups": ["MOD", "MANAGER"],
+    "commands": []
+  },
+  {
+    "discordId": "195664439410819073",
+    "groups": ["MOD", "MANAGER"],
+    "commands": []
+  },
+  {
+    "discordId": "616289137473093635",
+    "groups": ["MOD", "REFEREE", "MANAGER"],
+    "commands": []
+  },
+  {
+    "discordId": "288168676950147072",
+    "groups": ["MOD", "MANAGER"],
+    "commands": []
+  },
+  {
+    "discordId": "556428603756249093",
+    "groups": ["MOD"],
+    "commands": []
+  },
+  {
+    "discordId": "297825719260676096",
+    "groups": ["MOD"],
+    "commands": []
+  },
+  {
+    "discordId": "282121032318320640",
+    "groups": ["MOD"],
+    "commands": []
+  },
+  {
+    "discordId": "501041810026528768",
+    "groups": ["MOD"],
+    "commands": []
+  },
+  {
+    "discordId": "580207613611081748",
+    "groups": ["MOD"],
+    "commands": []
+  },
+  {
+    "discordId": "288625953393999872",
+    "groups": ["MOD"],
+    "commands": []
+  },
+  {
+    "discordId": "319478053120245772",
+    "groups": ["MOD"],
+    "commands": []
+  },
+  {
+    "discordId": "364114674892931093",
+    "groups": ["MOD"],
+    "commands": []
+  },
+  {
+    "discordId": "245384857306267648",
+    "groups": ["MOD"],
+    "commands": []
+  },
+
+  {
+    "discordId": "238003867978039297",
+    "groups": ["REFEREE"],
+    "commands": []
+  },
+  {
+    "discordId": "554152189850025985",
+    "groups": ["REFEREE"],
+    "commands": []
+  },
+  {
+    "discordId": "136674240014450689",
+    "groups": ["REFEREE"],
+    "commands": []
+  },
+  {
+    "discordId": "267421544878309376",
+    "groups": ["REFEREE"],
+    "commands": []
+  }
+]
