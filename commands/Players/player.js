@@ -15,8 +15,8 @@ module.exports.run = async ({ message, args, prefix }) => {
             embed.setColor(COLOR.INFO)
                 .setTitle(`${playerName.replace(/_/g, "\\_")}'s Profile`)
                 .setThumbnail(`https://crafatar.com/renders/head/${playerUuid}`)
-                .addField("Team", (pl) ? pl.team : "None")
-                .addField("Rank", (pl) ? pl.rank : "None")
+                .addField("Team", (pl && pl.team) ? pl.team : "None")
+                .addField("Rank", (pl && pl.rank) ? pl.rank : "None")
                 .addField("UUID", playerUuid);
         }
         else

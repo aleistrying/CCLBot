@@ -25,7 +25,7 @@ module.exports.run = async ({ message, args, prefix }) => {
                     .setDescription(`Player has been removed from ${oldPl.team}.`);
 
             }
-            else if (pl && oldPl && oldPl.team == null) {
+            else if (pl && pl.team == null || oldPl && oldPl.team == null) {
                 embed
                     .setColor(COLOR.WARN)
                     .setDescription(`Player is not on a team.`);

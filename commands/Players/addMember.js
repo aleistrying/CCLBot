@@ -19,23 +19,23 @@ module.exports.run = async ({ message, args, prefix }) => {
                 { team: tm.name },
                 { upsert: true, setDefaultsOnInsert: true, new: true, rawResult: true });
 
-            if (pl && oldPl && pl.value.team != oldPl.team && oldPl.team != null) {
+            if (pl && oldPl && pl.value.team != oldPl.team && (oldPl.team != null || oldPl.team == 'None')) {
                 console.log(oldPl.team)
                 embed
                     .setColor(COLOR.SUCCESS)
                     .setDescription(`Player has been added to ${tm.name} and removed from ${oldPl.team}.`);
 
             }
-            else if (pl && oldPl && pl.value.team == oldPl.team) {
+            else if (pl && oldPl && pl.value.team == oldPl.team && (oldPl.team == null || oldPl.team == "None")) {
                 embed.setColor(COLOR.WARN).setDescription(`Player is already in ${pl.value.team}.`)
             }
-            else if (pl && oldPl && oldPl.team == null) {
+            else if (pl) {
                 embed
                     .setColor(COLOR.SUCCESS)
                     .setDescription(`Player has been added to ${tm.name}`);
             }
             else {
-                log.info("error ", pl, oldPl)
+                log.info(`error   ${JSON.stringify(pl)}  ${JSON.stringify(oldPl)}`)
 
                 embed.setColor(COLOR.ERROR).setDescription("Data could not be updated. Contact ._.#1238.")
             }
