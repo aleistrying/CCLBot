@@ -6,7 +6,7 @@ const fs = require("fs");
 module.exports.run = async ({ message, args, prefix }) => {
     const manifest = JSON.parse(fs.readFileSync("./manifest.json"));
     // console.log(manifest)// https://discord.com/api/oauth2/authorize?client_id=804891581945348097&permissions=0&scope=bot
-    let invite = `https://discord.com/oauth2/authorize?&client_id=${manifest.bot.clientId}&scope=bot&permissions=1275128918`//52224 just in case
+    let invite = `https://discord.com/oauth2/authorize?&client_id=${manifest.bot.clientId}&scope=bot&permissions=52224`//1275128918  52224 just in case
 
     let embed = new MessageEmbed()
         .setColor(Colors.INFO)
